@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f6f5"><title>FloodOps · Response simulation</title>
+  <link rel="stylesheet" href="/styles.css?v=20261015-zoommaps5"><script type="module" src="/app.js?v=20261015-zoommaps5"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" aria-label="Main navigation">
+      <a class="brand" href="#command" aria-label="FloodOps command center"><span class="brand-mark"><span></span><span></span><span></span></span><span>FloodOps<small>RESCUE SIMULATION</small></span></a>
+      <div class="nav-label">RESPONSE</div>
+      <nav aria-label="Response">
+        <a class="nav-item active" href="#command" data-view="command"><span class="nav-icon">⌂</span>Overview</a>
+        <a class="nav-item" href="#incidents" data-view="incidents"><span class="nav-icon">＋</span>Incidents<span class="nav-count" id="incident-nav-count">0</span></a>
+        <a class="nav-item" href="#resources" data-view="resources"><span class="nav-icon">↗</span>Rescue teams</a>
+        <a class="nav-item" href="#network" data-view="network"><span class="nav-icon">⌁</span>Flood map</a>
+      </nav>
+      <details class="more-navigation"><summary>More tools</summary><nav aria-label="More tools"><a class="nav-item" href="#scenario" data-view="scenario"><span class="nav-icon">◷</span>Scenario controls</a><a class="nav-item" href="#coordination" data-view="coordination"><span class="nav-icon">⤳</span>Team coordination</a><a class="nav-item" href="#ledger" data-view="ledger"><span class="nav-icon">≡</span>Activity history</a><a class="nav-item" href="#safety" data-view="safety"><span class="nav-icon">✓</span>Safety checks</a></nav></details>
+      <div class="rail-bottom"><div class="local-badge"><span class="green-dot"></span>Simulation ready<small>TRAINING DATA</small></div><div class="profile"><span class="avatar">LO</span><span>Local operator<small>Response workspace</small></span></div></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar"><div class="crumb"><span>FloodOps</span><b>/</b><strong id="crumb-current">Overview</strong></div><div class="top-actions"><span class="synthetic-label"><span class="amber-dot"></span> TRAINING SIMULATION</span><label class="language-control"><span class="language-icon" aria-hidden="true">文</span><select id="language-select" aria-label="Language"><option value="en">English</option><option value="hi">हिन्दी</option></select></label></div></header>
+      <div class="content">
+        <div class="page-heading"><div><div class="eyebrow" id="session-eyebrow">BASELINE FLOOD RESPONSE · SEED 20261015</div><h1 id="page-title">Overview</h1><p id="page-subtitle">A clear view of current flood conditions and rescue activity.</p></div><div class="heading-actions"><span class="clock-chip"><span class="clock-symbol">◷</span><span>SIMULATION TIME <b id="sim-clock">000</b></span></span><button class="button button-quiet" id="reset-button">Reset scenario</button></div></div>
+        <div class="notice"><span class="notice-icon">i</span><span>Training environment. Locations and incidents are generated for simulation and do not represent real conditions.</span><button aria-label="Dismiss notice" id="dismiss-notice">×</button></div>
+        <section id="view-root" aria-live="polite"><div class="loading-state"><span class="spinner"></span>Loading persisted simulation state</div></section>
+        <footer>FLOODOPS <span>·</span> SYNTHETIC FLOOD RESPONSE RESEARCH <span>·</span> LOCAL SESSION</footer>
+      </div>
+    </main>
+    <div class="toast-region" id="toast-region" aria-live="polite"></div>
+  </div>
+  <dialog id="incident-dialog"><form method="dialog" id="incident-form"><div class="dialog-head"><div><div class="eyebrow">NEW REQUEST</div><h2>Report an incident</h2></div><button class="icon-button" value="cancel" aria-label="Close">×</button></div><label>Incident description<input name="title" required minlength="3" maxlength="100" placeholder="e.g. Residents stranded near river"></label><label>Location<select name="node_id" id="incident-location" required></select></label><div class="field-row"><label>Category<select name="category"><option value="trapped_residents">Trapped residents</option><option value="medical">Medical emergency</option><option value="stranded_family">Stranded family</option><option value="evacuation">Evacuation request</option><option value="supplies">Urgent supplies</option></select></label><label>People needing help<input name="people" type="number" min="1" max="100" value="2" required></label></div><div class="field-row"><label>Severity<select name="severity"><option value="5">Critical</option><option value="4">High</option><option value="3" selected>Elevated</option><option value="2">Moderate</option><option value="1">Low</option></select></label><label>Urgency<select name="urgency"><option value="5">Immediate</option><option value="4">Urgent</option><option value="3" selected>Soon</option><option value="2">Routine</option><option value="1">Low</option></select></label></div><div class="dialog-actions"><button type="button" class="button button-quiet" id="cancel-incident">Cancel</button><button class="button button-primary" id="save-incident">Save incident</button></div></form></dialog>
+  <dialog id="reset-dialog"><form method="dialog" id="reset-form"><div class="dialog-head"><div><div class="eyebrow">SCENARIO LAB</div><h2>Start a scenario</h2></div><button class="icon-button" value="cancel" aria-label="Close">×</button></div><p class="dialog-copy">Reset creates the selected initial conditions for the current local session. Current session records are replaced.</p><label>Scenario<select name="scenario"><option value="baseline">Baseline Flood Response</option><option value="triple-disruption">Triple Disruption Demonstration</option></select></label><label>Random seed<input name="seed" type="number" value="20261015" min="1" max="2147483647"></label><div class="dialog-actions"><button type="button" class="button button-quiet" id="cancel-reset">Cancel</button><button class="button button-primary">Load scenario</button></div></form></dialog>
+  <dialog id="event-dialog"><form method="dialog" id="event-form"><div class="dialog-head"><div><div class="eyebrow">INJECT DISRUPTION</div><h2>Schedule a scenario event</h2></div><button class="icon-button" value="cancel" aria-label="Close">×</button></div><label>Event type<select name="kind" id="event-kind"><option value="bridge_closure">Bridge closure</option><option value="resource_failure">Boat failure</option><option value="shelter_occupancy">Shelter occupancy update</option></select></label><div id="event-fields"></div><div class="dialog-actions"><button type="button" class="button button-quiet" id="cancel-event">Cancel</button><button class="button button-primary">Schedule event</button></div></form></dialog>
+  <dialog id="map-zoom-dialog" class="map-zoom-dialog" aria-labelledby="map-zoom-title"><div class="map-zoom-shell"><div class="map-zoom-header"><div><div class="eyebrow" id="map-zoom-kicker">FLOOD EXPOSURE MAP</div><h2 id="map-zoom-title">State map</h2></div><button class="icon-button" type="button" id="close-map-zoom" aria-label="Close enlarged map">×</button></div><div id="map-zoom-content"></div></div></dialog>
+</body></html>
